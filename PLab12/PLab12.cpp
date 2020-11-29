@@ -73,6 +73,12 @@ public:
     {
         this->bonus_num = a;
     }
+    /*virtual*/ void expand_bonus_num()
+    {
+        puts("\nIncreasing number of bonuses");
+        this->bonus_num += 2;
+        puts("Number of bonuses increased on 2");
+    }
     void reduce_bonus() //сокращение числа бонусов
     {
         puts("\nDecreasing number of bonuses");
@@ -99,6 +105,18 @@ public:
     {
         return this->definition;
     }
+    friend void operator << (ostream& o, special spec_offer)
+    {
+        cout << "\nNumber of bonuses : " << spec_offer.bonus_num << "\nDefinition: " << spec_offer.definition << "\n";
+    }
+    bool is_expanded_over_ten()
+    {
+        expand_bonus_num();
+        if (bonus_num > 10)
+            return true;
+        else
+            return false;
+    }
 };
 
 class limited_special : public special
@@ -117,12 +135,18 @@ public:
     {
         this->times_per_year = a;
     }
+    void expand_bonus_num()
+    {
+        puts("\nIncreasing number of bonuses");
+        this->bonus_num += 4;
+        puts("Number of bonuses increased on 4");
+    }
     void reduce_bonus_on_num(int a, int b)
     {
-        puts("\nDecreasing number of bonuses and time per year");
+        puts("\nDecreasing number of bonuses and times per year");
         this->bonus_num -= a;
         this->times_per_year -= b;
-        printf("Number of bonuses decreased on %d, time per year decreased on %d\n", a, b);
+        printf("Number of bonuses decreased on %d, times per year decreased on %d\n", a, b);
     }
     void set_default()
     {
@@ -134,6 +158,10 @@ public:
         this->bonus_num = spec_offer.get_bonus_num();
         this->definition = spec_offer.get_deinition();
         this->times_per_year = 4;
+    }
+    friend void operator << (ostream& o, limited_special lim_offer)
+    {
+        cout << "\nNumber of bonuses : " << lim_offer.bonus_num << "\nDefinition: " << lim_offer.definition << "\nTimes per year " << lim_offer.times_per_year << "\n";
     }
 };
 
@@ -371,25 +399,56 @@ int main()
 
     //работа с производным классом
 
+    int f1, f2;
     char* t;
     t = new char[10];
     strcpy(t, "ppp");
     limited_special lim_offer1(t, 8, 6);
     strcpy(t, "hhh");
     special sp_offer(t, 7);
-    lim_offer1.output();
+    cout << lim_offer1;
     puts("\nOverload without basic method (reducing bonus num)");
     lim_offer1.reduce_bonus_on_num(2, 1);
-    lim_offer1.output();
+    cout << lim_offer1;
     puts("\nOverload with basic method (setting default val)");
     lim_offer1.set_default();
-    lim_offer1.output();
-    puts("\nsp_offer");
-    sp_offer.output();
+    cout << lim_offer1;
     puts("\nOverload = (lim_offer1 = sp_offer)");
+    puts("\nsp_offer");
+    cout << sp_offer;
     lim_offer1 = sp_offer;
     puts("\nlim_offer1");
-    lim_offer1.output();
+    cout << lim_offer1;
+    puts("\nOverload of virtual function (increasing bonus_num for sp_offer and lim_offer1)");
+    puts("\nVirtual function called by non-virtual");
+    /*sp_offer.expand_bonus_num();
+    puts("\nsp_offer");
+    cout << sp_offer;
+    lim_offer1.expand_bonus_num();
+    puts("\nlim_offer1");
+    cout << lim_offer1;*/
+    f1 = sp_offer.is_expanded_over_ten();
+    if (f1)
+        puts("\nbonus num of sp_offer is over 10");
+    else
+        puts("\nbonus num of sp_offer is less than 10");
+    f2 = lim_offer1.is_expanded_over_ten();
+    if (f2)
+        puts("\nbonus num of lim_offer1 is over 10");
+    else
+        puts("\nbonus num of lim_offer1 is less than 10");
+    puts("\nVirtual function called by dynamic var of basic class");
+    strcpy(t, "rrr");
+    limited_special* lim_offer2;
+    lim_offer2 = new limited_special(t, 6, 4);
+    special* sp_offer2;
+    sp_offer2 = new special(t, 8);
+    sp_offer2 = lim_offer2;
+    puts("\nsp_offer2 = lim_offer2");
+    cout << *sp_offer2;
+    sp_offer2->expand_bonus_num();
+    puts("\nsp_offer2");
+    cout << *sp_offer2;
 
     //статический одномерный массив
 
