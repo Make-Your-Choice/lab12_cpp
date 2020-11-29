@@ -1,0 +1,9 @@
+﻿  PLab12.cpp
+C:\Users\Ангелина\source\repos\IIISemester\PLab12\PLab12\PLab12.cpp(366,29): warning C4101: 'm': unreferenced local variable
+C:\Users\Ангелина\source\repos\IIISemester\PLab12\PLab12\PLab12.cpp(366,19): warning C4101: 'z': unreferenced local variable
+C:\Users\Ангелина\source\repos\IIISemester\PLab12\PLab12\PLab12.cpp(366,39): warning C4101: 'p': unreferenced local variable
+C:\Users\Ангелина\source\repos\IIISemester\PLab12\PLab12\PLab12.cpp(366,16): warning C4101: 'y': unreferenced local variable
+C:\Users\Ангелина\source\repos\IIISemester\PLab12\PLab12\PLab12.cpp(366,26): warning C4101: 'n': unreferenced local variable
+C:\Users\Ангелина\source\repos\IIISemester\PLab12\PLab12\PLab12.cpp(366,42): warning C4101: 'r': unreferenced local variable
+C:\Users\Ангелина\source\repos\IIISemester\PLab12\PLab12\PLab12.cpp(366,22): warning C4101: 'x2': unreferenced local variable
+  PLab12.vcxproj -> C:\Users\Ангелина\source\repos\IIISemester\PLab12\Debug\PLab12.exe

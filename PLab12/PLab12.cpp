@@ -18,6 +18,7 @@ using namespace std;
 
 class special //бонусы
 {
+protected:
     int bonus_num; //число бонусов
     char* definition; //наименование бонусов
 public:
@@ -78,11 +79,61 @@ public:
         this->bonus_num -= 2;
         puts("Number of bonuses decreased on 2");
     }
+    void reduce_bonus_on_num(int a)
+    {
+        puts("\nDecreasing number of bonuses");
+        this->bonus_num -= a;
+        printf("Number of bonuses decreased on %d\n", a);
+    }
     void set_default() //установка значений по умолчанию
     {
         this->bonus_num = 5;
         definition = new char[10];
         strcpy(this->definition, str_0);
+    }
+    int get_bonus_num()
+    {
+        return this->bonus_num;
+    }
+    char* get_deinition()
+    {
+        return this->definition;
+    }
+};
+
+class limited_special : public special
+{
+    int times_per_year;
+public:
+    limited_special(char* a, int b, int c) : special(a, b)
+    {
+        times_per_year = c;
+    }
+    void output()
+    {
+        printf("\nNumber of bonuses: %d\nDefinition: %s\nTimes per year: %d\n", bonus_num, definition, times_per_year);
+    }
+    void change_times_per_year(int a)
+    {
+        this->times_per_year = a;
+    }
+    void reduce_bonus_on_num(int a, int b)
+    {
+        puts("\nDecreasing number of bonuses and time per year");
+        this->bonus_num -= a;
+        this->times_per_year -= b;
+        printf("Number of bonuses decreased on %d, time per year decreased on %d\n", a, b);
+    }
+    void set_default()
+    {
+        special::set_default();
+        this->times_per_year = 2;
+    }
+    void operator =(special spec_offer)
+    {
+        this->bonus_num = spec_offer.get_bonus_num();
+        this->definition = spec_offer.get_deinition();
+        this->times_per_year = 4;
     }
 };
 
@@ -318,9 +369,31 @@ int main()
     string x1, y1, z1;
     string s1, s2, s3; //массивы
 
+    //работа с производным классом
+
+    char* t;
+    t = new char[10];
+    strcpy(t, "ppp");
+    limited_special lim_offer1(t, 8, 6);
+    strcpy(t, "hhh");
+    special sp_offer(t, 7);
+    lim_offer1.output();
+    puts("\nOverload without basic method (reducing bonus num)");
+    lim_offer1.reduce_bonus_on_num(2, 1);
+    lim_offer1.output();
+    puts("\nOverload with basic method (setting default val)");
+    lim_offer1.set_default();
+    lim_offer1.output();
+    puts("\nsp_offer");
+    sp_offer.output();
+    puts("\nOverload = (lim_offer1 = sp_offer)");
+    lim_offer1 = sp_offer;
+    puts("\nlim_offer1");
+    lim_offer1.output();
+
     //статический одномерный массив
 
-    puts("\nWorking with a static one-sized massive\n");
+    /*puts("\nWorking with a static one-sized massive\n");
     special spec_offer3[nmax / 10]; //вызов конструктора по умолчанию (без параметров) статический
     puts("Input number of specials\n");
     scanf_s("%d", &n);
@@ -435,11 +508,11 @@ int main()
     book3->predictable_profit(&k);
     printf("\nPredictable profit for the third book (using *): %d\n", k);
     p = predictable_popularity(*book3);
-    printf("\nPredictable popularity for the first book (friend fuction): %d\n", p);
+    printf("\nPredictable popularity for the first book (friend fuction): %d\n", p);*/
 
     //статический двумерный массив
 
-    puts("\nWorking with a static two-sized massive\n");
+    /*puts("\nWorking with a static two-sized massive\n");
     special spec_offer4[nmax / 10][nmax / 10]; //вызов конструктора по умолчанию (без параметров) статический
     puts("Input number of specials (n and m)\n");
     scanf_s("%d %d", &n, &m);
@@ -557,11 +630,11 @@ int main()
     book4->predictable_profit(&k);
     printf("\nPredictable profit for the third book (using *): %d\n", k);
     p = predictable_popularity(*book4);
-    printf("\nPredictable popularity for the first book (friend fuction): %d\n", p);
+    printf("\nPredictable popularity for the first book (friend fuction): %d\n", p);*/
 
     //массив с помощью конструктора с параметром
 
-    printf("\nMassive using constructor with a single parameter\n");
+    /*printf("\nMassive using constructor with a single parameter\n");
     special spec_offer5[1];
     string title1 = "rrrr";
     string title2 = "ffff";
@@ -569,11 +642,11 @@ int main()
     for (int i = 0; i < 2; i++)
     {
         book5[i].output();
-    }
+    }*/
 
     //мелкое копирование
 
-    printf("\nShallow copying\n");
+    /*printf("\nShallow copying\n");
     char* ptr1;
     ptr1 = new char[10];
 
@@ -592,11 +665,11 @@ int main()
     printf("\nspec_offer6\n");
     spec_offer6.output();
     printf("\nspec_offer7\n");
-    spec_offer7.output();
+    spec_offer7.output();*/
 
     //глубокое копирование
 
-    printf("\nDeep copying and overload\n");
+    /*printf("\nDeep copying and overload\n");
     special* spec_offer_1;
     char* ptr;
     ptr = new char[10];
@@ -620,7 +693,7 @@ int main()
     printf("\nspec_offer_1\n");
     spec_offer_1->output();
     printf("\nspec_offer_2\n");
-    spec_offer_2->output();
+    spec_offer_2->output();*/
     return 0;
 }
 
