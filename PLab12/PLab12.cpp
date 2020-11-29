@@ -16,6 +16,42 @@ using namespace std;
 #define nmax 100
 #define str_0 "unknown"
 
+class payment
+{
+protected:
+    int is_succeed;
+public:
+    payment(int a)
+    {
+        is_succeed = a;
+    }
+    virtual int is_accessible() = 0;
+};
+
+class payment_cash : public payment
+{
+public:
+    payment_cash(int a) : payment(a)
+    {
+    }
+    int is_accessible()
+    {
+        return is_succeed;
+    }
+};
+
+class payment_card : public payment
+{
+public:
+    payment_card(int a) : payment(a)
+    {
+    }
+    int is_accessible()
+    {
+        return is_succeed;
+    }
+};
+
 class special //бонусы
 {
 protected:
@@ -73,7 +109,7 @@ public:
     {
         this->bonus_num = a;
     }
-    /*virtual*/ void expand_bonus_num()
+    virtual void expand_bonus_num()
     {
         puts("\nIncreasing number of bonuses");
         this->bonus_num += 2;
@@ -399,6 +435,7 @@ int main()
 
     //работа с производным классом
 
+    puts("\nWorking with a derivative class");
     int f1, f2;
     char* t;
     t = new char[10];
@@ -437,7 +474,7 @@ int main()
         puts("\nbonus num of lim_offer1 is over 10");
     else
         puts("\nbonus num of lim_offer1 is less than 10");
-    puts("\nVirtual function called by dynamic var of basic class");
+    puts("\nVirtual function called by dynamic var after copying");
     strcpy(t, "rrr");
     limited_special* lim_offer2;
     lim_offer2 = new limited_special(t, 6, 4);
@@ -449,6 +486,23 @@ int main()
     sp_offer2->expand_bonus_num();
     puts("\nsp_offer2");
     cout << *sp_offer2;
+
+    //работа с абстрактным классом
+
+    puts("\nWorking with an abtract class");
+    int res1, res2;
+    payment_cash cash1(1);
+    payment_card card1(0);
+    res1 = cash1.is_accessible();
+    if(res1)
+        puts("\ncash pay for cash1 is accessible");
+    else
+        puts("\ncas pay for cash1 is not accessible");
+    res2 = card1.is_accessible();
+    if (res2)
+        puts("\ncard pay for card1 is accessible");
+    else
+        puts("\ncard pay for card1 is not accessible");
 
     //статический одномерный массив
 
