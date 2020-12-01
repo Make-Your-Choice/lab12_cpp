@@ -1,5 +1,5 @@
 ﻿// PLab12.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+//Наследование, перегрузка методов, перегрузка присваивания, виртуальные функции и абстрактные классы
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
@@ -16,7 +16,7 @@ using namespace std;
 #define nmax 100
 #define str_0 "unknown"
 
-class payment
+class payment //абстрактный класс
 {
 protected:
     int is_succeed;
@@ -25,30 +25,30 @@ public:
     {
         is_succeed = a;
     }
-    virtual int is_accessible() = 0;
+    virtual int is_accessible() = 0; //чисто виртуальная функция проверки успешности операции оплаты
 };
 
-class payment_cash : public payment
+class payment_cash : public payment //наследник абстрактного класса
 {
 public:
     payment_cash(int a) : payment(a)
     {
     }
-    int is_accessible()
+    int is_accessible() //перегрузка виртуальной функции
     {
-        return is_succeed;
+        return is_succeed * 1;
     }
 };
 
-class payment_card : public payment
+class payment_card : public payment //наследник абстрактного класса
 {
 public:
     payment_card(int a) : payment(a)
     {
     }
-    int is_accessible()
+    int is_accessible() //перегрузка виртуальной функции
     {
-        return is_succeed;
+        return is_succeed * 0;
     }
 };
 
@@ -109,7 +109,7 @@ public:
     {
         this->bonus_num = a;
     }
-    virtual void expand_bonus_num()
+    virtual void expand_bonus_num() //увеличение числа бонусов
     {
         puts("\nIncreasing number of bonuses");
         this->bonus_num += 2;
@@ -121,7 +121,7 @@ public:
         this->bonus_num -= 2;
         puts("Number of bonuses decreased on 2");
     }
-    void reduce_bonus_on_num(int a)
+    void reduce_bonus_on_num(int a) //сокращение числа бонусов на заданное число
     {
         puts("\nDecreasing number of bonuses");
         this->bonus_num -= a;
@@ -133,19 +133,19 @@ public:
         definition = new char[10];
         strcpy(this->definition, str_0);
     }
-    int get_bonus_num()
+    int get_bonus_num() //геттер
     {
         return this->bonus_num;
     }
-    char* get_deinition()
+    char* get_deinition() //геттер
     {
         return this->definition;
     }
-    friend void operator << (ostream& o, special spec_offer)
+    friend void operator << (ostream& o, special spec_offer) //перегрузка оператора <<
     {
         cout << "\nNumber of bonuses : " << spec_offer.bonus_num << "\nDefinition: " << spec_offer.definition << "\n";
     }
-    bool is_expanded_over_ten()
+    bool is_expanded_over_ten() //проверка на наличие более 10 бонусов
     {
         expand_bonus_num();
         if (bonus_num > 10)
@@ -155,11 +155,11 @@ public:
     }
 };
 
-class limited_special : public special
+class limited_special : public special //наследование от класса бонусов - класс ограниченные бонусы
 {
-    int times_per_year;
+    int times_per_year; //периодичность в год
 public:
-    limited_special(char* a, int b, int c) : special(a, b)
+    limited_special(char* a, int b, int c) : special(a, b) //конструктор с вызовом конструктора базового класса
     {
         times_per_year = c;
     }
@@ -167,35 +167,35 @@ public:
     {
         printf("\nNumber of bonuses: %d\nDefinition: %s\nTimes per year: %d\n", bonus_num, definition, times_per_year);
     }
-    void change_times_per_year(int a)
+    void change_times_per_year(int a) //изменение периодичности
     {
         this->times_per_year = a;
     }
-    void expand_bonus_num()
+    void expand_bonus_num() //перегрузка базового метода увеличения числа бонусов
     {
         puts("\nIncreasing number of bonuses");
         this->bonus_num += 4;
         puts("Number of bonuses increased on 4");
     }
-    void reduce_bonus_on_num(int a, int b)
+    void reduce_bonus_on_num(int a, int b) //перегрузка базового метода сокращения числа бонусов на заданное число
     {
         puts("\nDecreasing number of bonuses and times per year");
         this->bonus_num -= a;
         this->times_per_year -= b;
         printf("Number of bonuses decreased on %d, times per year decreased on %d\n", a, b);
     }
-    void set_default()
+    void set_default() //перегрузка базового метода установления значений по усолчанию с вызовом метода базового класса
     {
         special::set_default();
         this->times_per_year = 2;
     }
-    void operator =(special spec_offer)
+    void operator =(special spec_offer) //перегрузка оператора присваивания
     {
         this->bonus_num = spec_offer.get_bonus_num();
         this->definition = spec_offer.get_deinition();
         this->times_per_year = 4;
     }
-    friend void operator << (ostream& o, limited_special lim_offer)
+    friend void operator << (ostream& o, limited_special lim_offer) //перегрузка оператора <<
     {
         cout << "\nNumber of bonuses : " << lim_offer.bonus_num << "\nDefinition: " << lim_offer.definition << "\nTimes per year " << lim_offer.times_per_year << "\n";
     }
@@ -444,26 +444,20 @@ int main()
     strcpy(t, "hhh");
     special sp_offer(t, 7);
     cout << lim_offer1;
-    puts("\nOverload without basic method (reducing bonus num)");
+    puts("\nOverload without basic method (reducing bonus num)"); //перегрузка без вызова базового метода
     lim_offer1.reduce_bonus_on_num(2, 1);
     cout << lim_offer1;
-    puts("\nOverload with basic method (setting default val)");
+    puts("\nOverload with basic method (setting default val)"); //перегрузка с вызовом базового метода
     lim_offer1.set_default();
     cout << lim_offer1;
-    puts("\nOverload = (lim_offer1 = sp_offer)");
+    puts("\nOverload = (lim_offer1 = sp_offer)"); //перегрузка оператора присваивания
     puts("\nsp_offer");
     cout << sp_offer;
     lim_offer1 = sp_offer;
     puts("\nlim_offer1");
     cout << lim_offer1;
     puts("\nOverload of virtual function (increasing bonus_num for sp_offer and lim_offer1)");
-    puts("\nVirtual function called by non-virtual");
-    /*sp_offer.expand_bonus_num();
-    puts("\nsp_offer");
-    cout << sp_offer;
-    lim_offer1.expand_bonus_num();
-    puts("\nlim_offer1");
-    cout << lim_offer1;*/
+    puts("\nVirtual function called by non-virtual"); //вызов виртуальной функции не виртуальной
     f1 = sp_offer.is_expanded_over_ten();
     if (f1)
         puts("\nbonus num of sp_offer is over 10");
@@ -474,7 +468,7 @@ int main()
         puts("\nbonus num of lim_offer1 is over 10");
     else
         puts("\nbonus num of lim_offer1 is less than 10");
-    puts("\nVirtual function called by dynamic var after copying");
+    puts("\nVirtual function called by dynamic var after copying"); //вызов виртуальной функции динамической переменной после копирования
     strcpy(t, "rrr");
     limited_special* lim_offer2;
     lim_offer2 = new limited_special(t, 6, 4);
@@ -493,320 +487,16 @@ int main()
     int res1, res2;
     payment_cash cash1(1);
     payment_card card1(0);
-    res1 = cash1.is_accessible();
+    res1 = cash1.is_accessible(); //вызов перегруженной виртуальной функции
     if(res1)
         puts("\ncash pay for cash1 is accessible");
     else
         puts("\ncas pay for cash1 is not accessible");
-    res2 = card1.is_accessible();
+    res2 = card1.is_accessible(); //вызов перегруженной виртуальной функции
     if (res2)
         puts("\ncard pay for card1 is accessible");
     else
         puts("\ncard pay for card1 is not accessible");
-
-    //статический одномерный массив
-
-    /*puts("\nWorking with a static one-sized massive\n");
-    special spec_offer3[nmax / 10]; //вызов конструктора по умолчанию (без параметров) статический
-    puts("Input number of specials\n");
-    scanf_s("%d", &n);
-    for (int i = 0; i < n; i++) //ввод одномерного массива
-    {
-        printf("\nInput number of bonuses for [%d] special: ", i+1);
-        cin >> x2;
-        spec_offer3[i].change_bonus_num(x2);
-        printf("Input bonus definition for [%d] special: ", i+1);
-        cin >> y2;
-        spec_offer3[i].change_def(y2);
-    }
-    puts("\nInput information about 3 book\n");
-    printf("Input title: ");
-    cin >> s1;
-    printf("Input author: ");
-    cin >> s2;
-    printf("Input genre: ");
-    cin >> s3;
-    r = 0;
-    while (r == 0) //проверка корректности ввода цены
-    {
-        printf("Input price: ");
-        r = 1;
-        cin >> x1;
-        try
-        {
-            if (!isdigit(x1[0])) //если цена - цифра
-                throw 1;
-            x = stoi(x1);
-        }
-        catch (int v)
-        {
-            cout << "Incorrect value\n"; //сообщение об ошибке
-            r = 0;
-        }
-        if (r == 1)
-        {
-            continue;
-        }
-    }
-    r = 0;
-    while (r == 0) //проверка корректности ввода количества на складе
-    {
-        printf("Input number in stock: ");
-        r = 1;
-        cin >> y1;
-        try
-        {
-            if (!isdigit(y1[0])) //если количество на складе - цифра
-                throw 1;
-            y = stoi(y1);
-        }
-        catch (int v)
-        {
-            cout << "Incorrect value\n"; //сообщение об ошибке
-            r = 0;
-        }
-        if (r == 1)
-        {
-            continue;
-        }
-    }
-    r = 0;
-    while (r == 0) //проверка корректности ввода популярности
-    {
-        printf("Input popularity: ");
-        r = 1;
-        cin >> z1;
-        try
-        {
-            if (!isdigit(z1[0])) //если популярность - цифра
-                throw 1;
-            z = stoi(z1);
-        }
-        catch (int v)
-        {
-            cout << "Incorrect value\n"; //сообщение об ошибке
-            r = 0;
-        }
-        if (r == 1)
-        {
-            continue;
-        }
-    }
-    book_store* book3 = new book_store(s1, s2, s3, x, y, z, n, spec_offer3); //вызов конструктора с параметрами динамический
-    printf("\nYour book\n");
-    book3->get();
-    book3->output();
-    book3->sell();
-    printf("\nThird book\n");
-    book3->get();
-    book3->output();
-    book3->price_rise();
-    printf("\nThird book\n");
-    book3->get();
-    book3->output();
-    book3->rearrange();
-    printf("\nThird book\n");
-    book3->get();
-    book3->output();
-    book3->archivate();
-    printf("\nThird book\n");
-    book3->get();
-    book3->output();
-    puts("Decreasing number for all the specials");
-    book3->reduce_bonus();
-    book3->get();
-    book3->output();
-    k = 1;
-    p = 0;
-    book3->predictable_profit(&k);
-    printf("\nPredictable profit for the third book (using *): %d\n", k);
-    p = predictable_popularity(*book3);
-    printf("\nPredictable popularity for the first book (friend fuction): %d\n", p);*/
-
-    //статический двумерный массив
-
-    /*puts("\nWorking with a static two-sized massive\n");
-    special spec_offer4[nmax / 10][nmax / 10]; //вызов конструктора по умолчанию (без параметров) статический
-    puts("Input number of specials (n and m)\n");
-    scanf_s("%d %d", &n, &m);
-    for (int i = 0; i < n; i++) //ввод двумерного массива
-    {
-        for (int j = 0; j < m; j++)
-        {
-            printf("\nInput number of bonuses for [%d][%d] special: ", i + 1, j + 1);
-            cin >> x2;
-            spec_offer4[i][j].change_bonus_num(x2);
-            printf("Input bonus definition for [%d][%d] special: ", i + 1, j + 1);
-            cin >> y2;
-            spec_offer4[i][j].change_def(y2);
-        }
-    }
-    puts("\nInput information about 3 book\n");
-    printf("Input title: ");
-    cin >> s1;
-    printf("Input author: ");
-    cin >> s2;
-    printf("Input genre: ");
-    cin >> s3;
-    r = 0;
-    while (r == 0) //проверка корректности ввода цены
-    {
-        printf("Input price: ");
-        r = 1;
-        cin >> x1;
-        try
-        {
-            if (!isdigit(x1[0])) //если цена - цифра
-                throw 1;
-            x = stoi(x1);
-        }
-        catch (int v)
-        {
-            cout << "Incorrect value\n"; //сообщение об ошибке
-            r = 0;
-        }
-        if (r == 1)
-        {
-            continue;
-        }
-    }
-    r = 0;
-    while (r == 0) //проверка корректности ввода количества на складе
-    {
-        printf("Input number in stock: ");
-        r = 1;
-        cin >> y1;
-        try
-        {
-            if (!isdigit(y1[0])) //если количество на складе - цифра
-                throw 1;
-            y = stoi(y1);
-        }
-        catch (int v)
-        {
-            cout << "Incorrect value\n"; //сообщение об ошибке
-            r = 0;
-        }
-        if (r == 1)
-        {
-            continue;
-        }
-    }
-    r = 0;
-    while (r == 0) //проверка корректности ввода популярности
-    {
-        printf("Input popularity: ");
-        r = 1;
-        cin >> z1;
-        try
-        {
-            if (!isdigit(z1[0])) //если популярность - цифра
-                throw 1;
-            z = stoi(z1);
-        }
-        catch (int v)
-        {
-            cout << "Incorrect value\n"; //сообщение об ошибке
-            r = 0;
-        }
-        if (r == 1)
-        {
-            continue;
-        }
-    }
-    book_store* book4 = new book_store(s1, s2, s3, x, y, z, n, m, spec_offer4); //вызов конструктора с параметрами динамический
-    printf("\nYour book\n");
-    book4->get();
-    book4->output1();
-    book4->sell();
-    printf("\nThird book\n");
-    book4->get();
-    book4->output1();
-    book4->price_rise();
-    printf("\nThird book\n");
-    book4->get();
-    book4->output1();
-    book4->rearrange();
-    printf("\nThird book\n");
-    book4->get();
-    book4->output1();
-    book4->archivate();
-    printf("\nThird book\n");
-    book4->get();
-    book4->output1();
-    puts("Decreasing number for all the specials");
-    book4->reduce_bonus1();
-    book4->get();
-    book4->output1();
-    k = 1;
-    p = 0;
-    book4->predictable_profit(&k);
-    printf("\nPredictable profit for the third book (using *): %d\n", k);
-    p = predictable_popularity(*book4);
-    printf("\nPredictable popularity for the first book (friend fuction): %d\n", p);*/
-
-    //массив с помощью конструктора с параметром
-
-    /*printf("\nMassive using constructor with a single parameter\n");
-    special spec_offer5[1];
-    string title1 = "rrrr";
-    string title2 = "ffff";
-    book_store book5[2] = { title1,title2 };
-    for (int i = 0; i < 2; i++)
-    {
-        book5[i].output();
-    }*/
-
-    //мелкое копирование
-
-    /*printf("\nShallow copying\n");
-    char* ptr1;
-    ptr1 = new char[10];
-
-    strcpy(ptr1, "iii");
-    special spec_offer6(ptr1, 10); //вызов конструктора с параметрами статический
-    special spec_offer7 = spec_offer6; //вызов конструктора копирования
-
-    printf("\nspec_offer6\n");
-    spec_offer6.output();
-    printf("\nspec_offer7\n");
-    spec_offer7.output();
-
-    strcpy(ptr1, "jjj");
-    spec_offer6.change_def(ptr1);
-    spec_offer6.change_bonus_num(5);
-    printf("\nspec_offer6\n");
-    spec_offer6.output();
-    printf("\nspec_offer7\n");
-    spec_offer7.output();*/
-
-    //глубокое копирование
-
-    /*printf("\nDeep copying and overload\n");
-    special* spec_offer_1;
-    char* ptr;
-    ptr = new char[10];
-    strcpy(ptr, "ppp");
-    spec_offer_1 = new special(ptr, 10);
-    special* spec_offer_2;
-    strcpy(ptr, "kkk");
-    spec_offer_2 = new special(ptr, 15);
-    printf("\nspec_offer_1\n");
-    spec_offer_1->output();
-    printf("\nspec_offer_2\n");
-    spec_offer_2->output();
-    *spec_offer_2 = *spec_offer_1;
-    printf("\nspec_offer_1\n");
-    spec_offer_1->output();
-    printf("\nspec_offer_2\n");
-    spec_offer_2->output();
-    spec_offer_1->set_default();
-    strcpy(ptr, "jjj");
-    spec_offer_1->change_def(ptr);
-    printf("\nspec_offer_1\n");
-    spec_offer_1->output();
-    printf("\nspec_offer_2\n");
-    spec_offer_2->output();*/
     return 0;
 }
 
